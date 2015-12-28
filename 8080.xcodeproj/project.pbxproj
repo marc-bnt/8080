@@ -15,6 +15,7 @@
 		498AF9C41C30FFFC00FEC732 /* _080UITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 498AF9C31C30FFFC00FEC732 /* _080UITests.m */; };
 		498AF9D31C31004600FEC732 /* 8080View.m in Sources */ = {isa = PBXBuildFile; fileRef = 498AF9D21C31004600FEC732 /* 8080View.m */; };
 		498AF9D61C31014600FEC732 /* 8080Machine.m in Sources */ = {isa = PBXBuildFile; fileRef = 498AF9D51C31014600FEC732 /* 8080Machine.m */; };
+		498AF9D91C3179AE00FEC732 /* 8080.c in Sources */ = {isa = PBXBuildFile; fileRef = 498AF9D71C3179AE00FEC732 /* 8080.c */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -52,6 +53,8 @@
 		498AF9D21C31004600FEC732 /* 8080View.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = 8080View.m; sourceTree = "<group>"; };
 		498AF9D41C31014600FEC732 /* 8080Machine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = 8080Machine.h; sourceTree = "<group>"; };
 		498AF9D51C31014600FEC732 /* 8080Machine.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = 8080Machine.m; sourceTree = "<group>"; };
+		498AF9D71C3179AE00FEC732 /* 8080.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = 8080.c; sourceTree = "<group>"; };
+		498AF9D81C3179AE00FEC732 /* 8080.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = 8080.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -82,6 +85,8 @@
 		498AF9981C30FFFB00FEC732 = {
 			isa = PBXGroup;
 			children = (
+				498AF9D71C3179AE00FEC732 /* 8080.c */,
+				498AF9D81C3179AE00FEC732 /* 8080.h */,
 				498AF9D41C31014600FEC732 /* 8080Machine.h */,
 				498AF9D51C31014600FEC732 /* 8080Machine.m */,
 				498AF9D11C31004600FEC732 /* 8080View.h */,
@@ -271,6 +276,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				498AF9D91C3179AE00FEC732 /* 8080.c in Sources */,
 				498AF9A91C30FFFB00FEC732 /* main.m in Sources */,
 				498AF9D61C31014600FEC732 /* 8080Machine.m in Sources */,
 				498AF9A61C30FFFB00FEC732 /* AppDelegate.m in Sources */,
