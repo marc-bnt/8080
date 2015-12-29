@@ -36,9 +36,5 @@ typedef struct emuState {
     uint8_t   *memory;
 } emuState;
 
-typedef struct emuState emuState;
-
-int loadFile(emuState *state, const char *filename, uint16_t offset);
-
 void init(emuState *state);
 int execute(emuState *state);

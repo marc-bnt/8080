@@ -13,6 +13,8 @@
 		496EA68A1C322C4100150F21 /* invaders.e in Resources */ = {isa = PBXBuildFile; fileRef = 496EA6861C322C4100150F21 /* invaders.e */; };
 		496EA68B1C322C4100150F21 /* invaders.f in Sources */ = {isa = PBXBuildFile; fileRef = 496EA6871C322C4100150F21 /* invaders.f */; };
 		496EA68C1C322C4100150F21 /* invaders.g in Resources */ = {isa = PBXBuildFile; fileRef = 496EA6881C322C4100150F21 /* invaders.g */; };
+		496EA68D1C322C7E00150F21 /* invaders.f in Resources */ = {isa = PBXBuildFile; fileRef = 496EA6871C322C4100150F21 /* invaders.f */; };
+		496EA68E1C322C7E00150F21 /* invaders.h in Resources */ = {isa = PBXBuildFile; fileRef = 496EA6891C322C4100150F21 /* invaders.h */; };
 		498AF9A61C30FFFB00FEC732 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 498AF9A51C30FFFB00FEC732 /* AppDelegate.m */; };
 		498AF9A91C30FFFB00FEC732 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 498AF9A81C30FFFB00FEC732 /* main.m */; };
 		498AF9AB1C30FFFB00FEC732 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 498AF9AA1C30FFFB00FEC732 /* Assets.xcassets */; };
@@ -63,10 +65,10 @@
 		498AF9BF1C30FFFC00FEC732 /* 8080UITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = 8080UITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		498AF9C31C30FFFC00FEC732 /* _080UITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = _080UITests.m; sourceTree = "<group>"; };
 		498AF9C51C30FFFC00FEC732 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		498AF9D11C31004600FEC732 /* 8080View.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = 8080View.h; sourceTree = "<group>"; };
-		498AF9D21C31004600FEC732 /* 8080View.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = 8080View.m; sourceTree = "<group>"; };
-		498AF9D41C31014600FEC732 /* 8080Machine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = 8080Machine.h; sourceTree = "<group>"; };
-		498AF9D51C31014600FEC732 /* 8080Machine.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = 8080Machine.m; sourceTree = "<group>"; };
+		498AF9D11C31004600FEC732 /* 8080View.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = 8080View.h; sourceTree = SOURCE_ROOT; };
+		498AF9D21C31004600FEC732 /* 8080View.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = 8080View.m; sourceTree = SOURCE_ROOT; };
+		498AF9D41C31014600FEC732 /* 8080Machine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = 8080Machine.h; sourceTree = SOURCE_ROOT; };
+		498AF9D51C31014600FEC732 /* 8080Machine.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = 8080Machine.m; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -122,10 +124,6 @@
 				496EA6851C322C4100150F21 /* data */,
 				496EA6771C322BE000150F21 /* emu */,
 				496EA67D1C322BE000150F21 /* info.txt */,
-				498AF9D41C31014600FEC732 /* 8080Machine.h */,
-				498AF9D51C31014600FEC732 /* 8080Machine.m */,
-				498AF9D11C31004600FEC732 /* 8080View.h */,
-				498AF9D21C31004600FEC732 /* 8080View.m */,
 				498AF9A31C30FFFB00FEC732 /* 8080 */,
 				498AF9B71C30FFFC00FEC732 /* 8080Tests */,
 				498AF9C21C30FFFC00FEC732 /* 8080UITests */,
@@ -146,6 +144,10 @@
 		498AF9A31C30FFFB00FEC732 /* 8080 */ = {
 			isa = PBXGroup;
 			children = (
+				498AF9D41C31014600FEC732 /* 8080Machine.h */,
+				498AF9D51C31014600FEC732 /* 8080Machine.m */,
+				498AF9D11C31004600FEC732 /* 8080View.h */,
+				498AF9D21C31004600FEC732 /* 8080View.m */,
 				498AF9A41C30FFFB00FEC732 /* AppDelegate.h */,
 				498AF9A51C30FFFB00FEC732 /* AppDelegate.m */,
 				498AF9AA1C30FFFB00FEC732 /* Assets.xcassets */,
@@ -285,6 +287,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				496EA68D1C322C7E00150F21 /* invaders.f in Resources */,
+				496EA68E1C322C7E00150F21 /* invaders.h in Resources */,
 				498AF9AB1C30FFFB00FEC732 /* Assets.xcassets in Resources */,
 				496EA68A1C322C4100150F21 /* invaders.e in Resources */,
 				498AF9AE1C30FFFC00FEC732 /* MainMenu.xib in Resources */,

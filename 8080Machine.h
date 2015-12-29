@@ -7,13 +7,18 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "emu.h"
 
 @interface _080Machine : NSObject
 {
-    uint8_t	*memory;
-    NSTimer *timer;
+    emuState *state;
+    NSTimer  *timer;
+    
+    double_t now;
+    double_t last;
 }
 
+-(void) loadFile:(NSString *)filename offset:(uint16_t)offset;
 -(id) init;
 -(void) startEmulation;
 -(void) cycle;
