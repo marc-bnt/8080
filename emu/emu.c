@@ -30,9 +30,7 @@ int cycle(emuState *state) {
     uint16_t offset = state->pc++;
     uint8_t *opcode = &state->memory[offset];
     
-#if LOG
-    printf("0x%08x: 0x%02x (0x%02x, 0x%02x) \n", offset, *opcode, opcode[1], opcode[2]);
-#endif
+    // TODO: Disable writing to ROM
     
     switch (*opcode) {
         case 0x00:  // NOP
@@ -44,11 +42,51 @@ int cycle(emuState *state) {
             state->registers->b = opcode[1];
             state->pc++;
             break;
+
+        case 0x11:  // LXI D
+            cycles = 10;
+            state->registers->d = opcode[2];
+            state->registers->e = opcode[1];
+            state->pc += 2;
+            break;
+            
+        case 0x13: {    // INX D
+            int16_t result = (state->registers->d << 8 | state->registers->e) + 1;
+            cycles = 5;
+            state->registers->d = result >> 8;
+            state->registers->e = result;
+            break;
+        }
+
+        case 0x1a:  // LDAX D
+            cycles = 7;
+            state->registers->a = state->memory[state->registers->d << 8 | state->registers->e];
+            break;
+        
+        case 0x21:  // LXI H
+            cycles = 10;
+            state->registers->h = opcode[2];
+            state->registers->l = opcode[1];
+            state->pc += 2;
+            break;
+            
+        case 0x23: {    // INX H
+            int16_t result = (state->registers->h << 8 | state->registers->l) + 1;
+            cycles = 5;
+            state->registers->h = result >> 8;
+            state->registers->l = result;
+            break;
+        }
             
         case 0x31:  // LXI SP
             cycles = 10;
             state->sp = opcode[2] << 8 | opcode[1];
             state->pc += 2;
+            break;
+            
+        case 0x77:  // MOV M,A
+            cycles = 7;
+            state->memory[state->registers->h << 8 | state->registers->l] = state->registers->a;
             break;
             
         case 0xc3:  // JMP
@@ -69,9 +107,13 @@ int cycle(emuState *state) {
         }
 
         default:
-            printf("Invalid opcode 0x%02x", *opcode);
+            printf("Invalid opcode: 0x%02x (0x%02x, 0x%02x) \n", *opcode, opcode[1], opcode[2]);
             exit(1);
     }
+    
+#if LOG
+    printf("0x%08x: 0x%02x (0x%02x, 0x%02x) \n", offset, *opcode, opcode[1], opcode[2]);
+#endif
     
     return cycles;
 }
