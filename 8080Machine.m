@@ -20,8 +20,6 @@
     {
         for (j = 0; j < 256; j+= 8)
         {
-            // divide by 8 because there are 8 pixels
-            // in a byte
             memory[0x2400 + (i*(256/8)) + j/8] = 0xFF;
         }
     }
@@ -32,7 +30,15 @@
 
 - (void) startEmulation
 {
-    NSLog(@"Start!");
+    timer = [NSTimer scheduledTimerWithTimeInterval: 0.001
+                                                     target: self
+                                                   selector:@selector(cycle)
+                                                   userInfo: nil repeats:YES];
+}
+
+-(void) cycle
+{
+    NSLog(@"Cycle!");
 }
 
 -(void *) framebuffer

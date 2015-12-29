@@ -7,6 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		496EA67E1C322BE000150F21 /* invaders.e in Resources */ = {isa = PBXBuildFile; fileRef = 496EA6731C322BE000150F21 /* invaders.e */; };
+		496EA67F1C322BE000150F21 /* invaders.f in Sources */ = {isa = PBXBuildFile; fileRef = 496EA6741C322BE000150F21 /* invaders.f */; };
+		496EA6801C322BE000150F21 /* invaders.g in Resources */ = {isa = PBXBuildFile; fileRef = 496EA6751C322BE000150F21 /* invaders.g */; };
+		496EA6811C322BE000150F21 /* emu.c in Sources */ = {isa = PBXBuildFile; fileRef = 496EA6781C322BE000150F21 /* emu.c */; };
+		496EA6831C322BE000150F21 /* testEmu.c in Sources */ = {isa = PBXBuildFile; fileRef = 496EA67B1C322BE000150F21 /* testEmu.c */; };
+		496EA6841C322BE000150F21 /* info.txt in Resources */ = {isa = PBXBuildFile; fileRef = 496EA67D1C322BE000150F21 /* info.txt */; };
 		498AF9A61C30FFFB00FEC732 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 498AF9A51C30FFFB00FEC732 /* AppDelegate.m */; };
 		498AF9A91C30FFFB00FEC732 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 498AF9A81C30FFFB00FEC732 /* main.m */; };
 		498AF9AB1C30FFFB00FEC732 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 498AF9AA1C30FFFB00FEC732 /* Assets.xcassets */; };
@@ -15,7 +21,6 @@
 		498AF9C41C30FFFC00FEC732 /* _080UITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 498AF9C31C30FFFC00FEC732 /* _080UITests.m */; };
 		498AF9D31C31004600FEC732 /* 8080View.m in Sources */ = {isa = PBXBuildFile; fileRef = 498AF9D21C31004600FEC732 /* 8080View.m */; };
 		498AF9D61C31014600FEC732 /* 8080Machine.m in Sources */ = {isa = PBXBuildFile; fileRef = 498AF9D51C31014600FEC732 /* 8080Machine.m */; };
-		498AF9D91C3179AE00FEC732 /* 8080.c in Sources */ = {isa = PBXBuildFile; fileRef = 498AF9D71C3179AE00FEC732 /* 8080.c */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -36,6 +41,15 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		496EA6731C322BE000150F21 /* invaders.e */ = {isa = PBXFileReference; lastKnownFileType = file; path = invaders.e; sourceTree = "<group>"; };
+		496EA6741C322BE000150F21 /* invaders.f */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.fortran; path = invaders.f; sourceTree = "<group>"; };
+		496EA6751C322BE000150F21 /* invaders.g */ = {isa = PBXFileReference; lastKnownFileType = file; path = invaders.g; sourceTree = "<group>"; };
+		496EA6761C322BE000150F21 /* invaders.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = invaders.h; sourceTree = "<group>"; };
+		496EA6781C322BE000150F21 /* emu.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = emu.c; sourceTree = "<group>"; };
+		496EA6791C322BE000150F21 /* emu.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = emu.h; sourceTree = "<group>"; };
+		496EA67B1C322BE000150F21 /* testEmu.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = testEmu.c; sourceTree = "<group>"; };
+		496EA67C1C322BE000150F21 /* testEmu.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = testEmu.h; sourceTree = "<group>"; };
+		496EA67D1C322BE000150F21 /* info.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = info.txt; sourceTree = "<group>"; };
 		498AF9A11C30FFFB00FEC732 /* 8080.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = 8080.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		498AF9A41C30FFFB00FEC732 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		498AF9A51C30FFFB00FEC732 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -53,8 +67,6 @@
 		498AF9D21C31004600FEC732 /* 8080View.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = 8080View.m; sourceTree = "<group>"; };
 		498AF9D41C31014600FEC732 /* 8080Machine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = 8080Machine.h; sourceTree = "<group>"; };
 		498AF9D51C31014600FEC732 /* 8080Machine.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = 8080Machine.m; sourceTree = "<group>"; };
-		498AF9D71C3179AE00FEC732 /* 8080.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = 8080.c; sourceTree = "<group>"; };
-		498AF9D81C3179AE00FEC732 /* 8080.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = 8080.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -82,11 +94,34 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		496EA6721C322BE000150F21 /* data */ = {
+			isa = PBXGroup;
+			children = (
+				496EA6731C322BE000150F21 /* invaders.e */,
+				496EA6741C322BE000150F21 /* invaders.f */,
+				496EA6751C322BE000150F21 /* invaders.g */,
+				496EA6761C322BE000150F21 /* invaders.h */,
+			);
+			path = data;
+			sourceTree = "<group>";
+		};
+		496EA6771C322BE000150F21 /* emu */ = {
+			isa = PBXGroup;
+			children = (
+				496EA6781C322BE000150F21 /* emu.c */,
+				496EA6791C322BE000150F21 /* emu.h */,
+				496EA67B1C322BE000150F21 /* testEmu.c */,
+				496EA67C1C322BE000150F21 /* testEmu.h */,
+			);
+			path = emu;
+			sourceTree = "<group>";
+		};
 		498AF9981C30FFFB00FEC732 = {
 			isa = PBXGroup;
 			children = (
-				498AF9D71C3179AE00FEC732 /* 8080.c */,
-				498AF9D81C3179AE00FEC732 /* 8080.h */,
+				496EA6721C322BE000150F21 /* data */,
+				496EA6771C322BE000150F21 /* emu */,
+				496EA67D1C322BE000150F21 /* info.txt */,
 				498AF9D41C31014600FEC732 /* 8080Machine.h */,
 				498AF9D51C31014600FEC732 /* 8080Machine.m */,
 				498AF9D11C31004600FEC732 /* 8080View.h */,
@@ -252,6 +287,9 @@
 			files = (
 				498AF9AB1C30FFFB00FEC732 /* Assets.xcassets in Resources */,
 				498AF9AE1C30FFFC00FEC732 /* MainMenu.xib in Resources */,
+				496EA67E1C322BE000150F21 /* invaders.e in Resources */,
+				496EA6801C322BE000150F21 /* invaders.g in Resources */,
+				496EA6841C322BE000150F21 /* info.txt in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -276,11 +314,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				498AF9D91C3179AE00FEC732 /* 8080.c in Sources */,
 				498AF9A91C30FFFB00FEC732 /* main.m in Sources */,
+				496EA6831C322BE000150F21 /* testEmu.c in Sources */,
 				498AF9D61C31014600FEC732 /* 8080Machine.m in Sources */,
 				498AF9A61C30FFFB00FEC732 /* AppDelegate.m in Sources */,
+				496EA6811C322BE000150F21 /* emu.c in Sources */,
 				498AF9D31C31004600FEC732 /* 8080View.m in Sources */,
+				496EA67F1C322BE000150F21 /* invaders.f in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -501,6 +541,7 @@
 				498AF9CA1C30FFFC00FEC732 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		498AF9CB1C30FFFC00FEC732 /* Build configuration list for PBXNativeTarget "8080Tests" */ = {
 			isa = XCConfigurationList;
@@ -509,6 +550,7 @@
 				498AF9CD1C30FFFC00FEC732 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		498AF9CE1C30FFFC00FEC732 /* Build configuration list for PBXNativeTarget "8080UITests" */ = {
 			isa = XCConfigurationList;
@@ -517,6 +559,7 @@
 				498AF9D01C30FFFC00FEC732 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

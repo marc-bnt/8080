@@ -10,11 +10,13 @@
 
 @interface _080Machine : NSObject
 {
-    uint8_t		*memory;
+    uint8_t	*memory;
+    NSTimer *timer;
 }
 
 -(id) init;
 -(void) startEmulation;
+-(void) cycle;
 -(void *) framebuffer;
 
 @end
