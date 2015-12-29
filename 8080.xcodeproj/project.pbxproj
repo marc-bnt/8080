@@ -7,12 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		496EA67E1C322BE000150F21 /* invaders.e in Resources */ = {isa = PBXBuildFile; fileRef = 496EA6731C322BE000150F21 /* invaders.e */; };
-		496EA67F1C322BE000150F21 /* invaders.f in Sources */ = {isa = PBXBuildFile; fileRef = 496EA6741C322BE000150F21 /* invaders.f */; };
-		496EA6801C322BE000150F21 /* invaders.g in Resources */ = {isa = PBXBuildFile; fileRef = 496EA6751C322BE000150F21 /* invaders.g */; };
 		496EA6811C322BE000150F21 /* emu.c in Sources */ = {isa = PBXBuildFile; fileRef = 496EA6781C322BE000150F21 /* emu.c */; };
 		496EA6831C322BE000150F21 /* testEmu.c in Sources */ = {isa = PBXBuildFile; fileRef = 496EA67B1C322BE000150F21 /* testEmu.c */; };
 		496EA6841C322BE000150F21 /* info.txt in Resources */ = {isa = PBXBuildFile; fileRef = 496EA67D1C322BE000150F21 /* info.txt */; };
+		496EA68A1C322C4100150F21 /* invaders.e in Resources */ = {isa = PBXBuildFile; fileRef = 496EA6861C322C4100150F21 /* invaders.e */; };
+		496EA68B1C322C4100150F21 /* invaders.f in Sources */ = {isa = PBXBuildFile; fileRef = 496EA6871C322C4100150F21 /* invaders.f */; };
+		496EA68C1C322C4100150F21 /* invaders.g in Resources */ = {isa = PBXBuildFile; fileRef = 496EA6881C322C4100150F21 /* invaders.g */; };
 		498AF9A61C30FFFB00FEC732 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 498AF9A51C30FFFB00FEC732 /* AppDelegate.m */; };
 		498AF9A91C30FFFB00FEC732 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 498AF9A81C30FFFB00FEC732 /* main.m */; };
 		498AF9AB1C30FFFB00FEC732 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 498AF9AA1C30FFFB00FEC732 /* Assets.xcassets */; };
@@ -41,15 +41,15 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		496EA6731C322BE000150F21 /* invaders.e */ = {isa = PBXFileReference; lastKnownFileType = file; path = invaders.e; sourceTree = "<group>"; };
-		496EA6741C322BE000150F21 /* invaders.f */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.fortran; path = invaders.f; sourceTree = "<group>"; };
-		496EA6751C322BE000150F21 /* invaders.g */ = {isa = PBXFileReference; lastKnownFileType = file; path = invaders.g; sourceTree = "<group>"; };
-		496EA6761C322BE000150F21 /* invaders.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = invaders.h; sourceTree = "<group>"; };
 		496EA6781C322BE000150F21 /* emu.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = emu.c; sourceTree = "<group>"; };
 		496EA6791C322BE000150F21 /* emu.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = emu.h; sourceTree = "<group>"; };
 		496EA67B1C322BE000150F21 /* testEmu.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = testEmu.c; sourceTree = "<group>"; };
 		496EA67C1C322BE000150F21 /* testEmu.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = testEmu.h; sourceTree = "<group>"; };
 		496EA67D1C322BE000150F21 /* info.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = info.txt; sourceTree = "<group>"; };
+		496EA6861C322C4100150F21 /* invaders.e */ = {isa = PBXFileReference; lastKnownFileType = file; path = invaders.e; sourceTree = "<group>"; };
+		496EA6871C322C4100150F21 /* invaders.f */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.fortran; path = invaders.f; sourceTree = "<group>"; };
+		496EA6881C322C4100150F21 /* invaders.g */ = {isa = PBXFileReference; lastKnownFileType = file; path = invaders.g; sourceTree = "<group>"; };
+		496EA6891C322C4100150F21 /* invaders.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = invaders.h; sourceTree = "<group>"; };
 		498AF9A11C30FFFB00FEC732 /* 8080.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = 8080.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		498AF9A41C30FFFB00FEC732 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		498AF9A51C30FFFB00FEC732 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -94,17 +94,6 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		496EA6721C322BE000150F21 /* data */ = {
-			isa = PBXGroup;
-			children = (
-				496EA6731C322BE000150F21 /* invaders.e */,
-				496EA6741C322BE000150F21 /* invaders.f */,
-				496EA6751C322BE000150F21 /* invaders.g */,
-				496EA6761C322BE000150F21 /* invaders.h */,
-			);
-			path = data;
-			sourceTree = "<group>";
-		};
 		496EA6771C322BE000150F21 /* emu */ = {
 			isa = PBXGroup;
 			children = (
@@ -116,10 +105,21 @@
 			path = emu;
 			sourceTree = "<group>";
 		};
+		496EA6851C322C4100150F21 /* data */ = {
+			isa = PBXGroup;
+			children = (
+				496EA6861C322C4100150F21 /* invaders.e */,
+				496EA6871C322C4100150F21 /* invaders.f */,
+				496EA6881C322C4100150F21 /* invaders.g */,
+				496EA6891C322C4100150F21 /* invaders.h */,
+			);
+			path = data;
+			sourceTree = "<group>";
+		};
 		498AF9981C30FFFB00FEC732 = {
 			isa = PBXGroup;
 			children = (
-				496EA6721C322BE000150F21 /* data */,
+				496EA6851C322C4100150F21 /* data */,
 				496EA6771C322BE000150F21 /* emu */,
 				496EA67D1C322BE000150F21 /* info.txt */,
 				498AF9D41C31014600FEC732 /* 8080Machine.h */,
@@ -286,10 +286,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				498AF9AB1C30FFFB00FEC732 /* Assets.xcassets in Resources */,
+				496EA68A1C322C4100150F21 /* invaders.e in Resources */,
 				498AF9AE1C30FFFC00FEC732 /* MainMenu.xib in Resources */,
-				496EA67E1C322BE000150F21 /* invaders.e in Resources */,
-				496EA6801C322BE000150F21 /* invaders.g in Resources */,
 				496EA6841C322BE000150F21 /* info.txt in Resources */,
+				496EA68C1C322C4100150F21 /* invaders.g in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -319,8 +319,8 @@
 				498AF9D61C31014600FEC732 /* 8080Machine.m in Sources */,
 				498AF9A61C30FFFB00FEC732 /* AppDelegate.m in Sources */,
 				496EA6811C322BE000150F21 /* emu.c in Sources */,
+				496EA68B1C322C4100150F21 /* invaders.f in Sources */,
 				498AF9D31C31004600FEC732 /* 8080View.m in Sources */,
-				496EA67F1C322BE000150F21 /* invaders.f in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
