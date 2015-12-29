@@ -31,13 +31,16 @@ static uint8_t getParity(uint8_t value) {
 }
 
 static void setFlags(emuState *state, uint8_t value) {
-    state->flags.z = (value == 0);
-    state->flags.s = ((value & 0x80) == 0x80);
-    state->flags.p = getParity(value);
+    state->flags->c = 0;
+    state->flags->h = 0;
+    state->flags->z = (value == 0);
+    state->flags->s = ((value & 0x80) == 0x80);
+    state->flags->p = getParity(value);
 }
 
 void init(emuState *state) {
     state->registers = malloc(sizeof(registers));
+    state->flags = malloc(sizeof(flags));
 
     state->sp = 0;
     state->pc = 0;
@@ -82,7 +85,7 @@ int cycle(emuState *state) {
             
             state->registers->h = value >> 8;
             state->registers->l = value;
-            state->flags.c = (value > 0xffff);
+            state->flags->c = (value > 0xffff);
             break;
         }
             
@@ -96,6 +99,15 @@ int cycle(emuState *state) {
             state->registers->c = opcode[1];
             state->pc++;
             break;
+            
+        case 0x0f: {    // RRC
+            int8_t a = state->registers->a;
+            cycles = 4;
+            
+            state->registers->a = a << 1 | (a >> 1 & 1);
+            state->flags->c = a;
+            break;
+        }
             
         case 0x11:  // LXI D
             cycles = 10;
@@ -119,7 +131,7 @@ int cycle(emuState *state) {
             
             state->registers->h = value >> 8;
             state->registers->l = value;
-            state->flags.c = (value > 0xffff);
+            state->flags->c = (value > 0xffff);
             break;
         }
             
@@ -156,7 +168,7 @@ int cycle(emuState *state) {
             
             state->registers->h = value >> 8;
             state->registers->l = value;
-            state->flags.c = (value > 0xffff);
+            state->flags->c = (value > 0xffff);
             break;
         }
             
@@ -241,6 +253,17 @@ int cycle(emuState *state) {
             state->sp -= 2;
             break;
             
+        case 0xc6: {    // ADI
+            int16_t value = (int16_t)state->registers->a + (int16_t)opcode[1];
+            cycles = 7;
+            
+            state->registers->a = value;
+            setFlags(state, state->registers->a);
+            state->flags->c = (value > 0xff);
+            state->pc++;
+            break;
+        }
+            
         case 0xc9:  // RET
             cycles = 10;
             state->pc = state->memory[state->sp + 1] << 8 | state->memory[state->sp];
@@ -285,6 +308,13 @@ int cycle(emuState *state) {
             state->sp -= 2;
             break;
 
+        case 0xe6:  // ANI
+            cycles = 7;
+            state->registers->a = state->registers->a & opcode[1];
+            setFlags(state, state->registers->a);
+            state->pc++;
+            break;
+            
         case 0xe1:  // POP H
             cycles = 10;
             state->registers->l = state->memory[state->sp];
@@ -307,15 +337,14 @@ int cycle(emuState *state) {
         case 0xf5:  // PUSH PSW
             cycles = 11;
             state->memory[state->sp - 1] = state->registers->a;
-            state->memory[state->sp - 2] = *(uint8_t *)&state->flags;
-            printf("\n0x%02x\n", *(uint8_t *)&state->flags);
+            state->memory[state->sp - 2] = *(uint8_t *)state->flags;
             state->sp -= 2;
             break;
     
         case 0xfe:
             cycles = 7;
             setFlags(state, state->registers->a - opcode[1]);
-            state->flags.c = (state->registers->a < opcode[1]);
+            state->flags->c = (state->registers->a < opcode[1]);
             state->pc++;
             
             break;

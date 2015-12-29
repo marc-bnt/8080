@@ -20,6 +20,7 @@ static void testReturn();
 static void testIncrementAndDecrement();
 static void testAdd();
 static void testLogical();
+static void testRotate();
 static void testInputOutput();
 static void testControl();
 
@@ -47,12 +48,12 @@ void testInit() {
     assert(state->sp == 0);
     assert(state->pc == 0);
 
-    assert(state->flags.c == 0);
-    assert(state->flags.p == 0);
-    assert(state->flags.h == 0);
-    assert(state->flags.i == 0);
-    assert(state->flags.z == 0);
-    assert(state->flags.s == 0);
+    assert(state->flags->c == 0);
+    assert(state->flags->p == 0);
+    assert(state->flags->h == 0);
+    assert(state->flags->i == 0);
+    assert(state->flags->z == 0);
+    assert(state->flags->s == 0);
 
     printf("OK!\n");
 }
@@ -67,6 +68,7 @@ void testCycle() {
     testIncrementAndDecrement();
     testAdd();
     testLogical();
+    testRotate();
     testInputOutput();
     testControl();
     printf("OK!\n");
@@ -280,29 +282,17 @@ static void testStackOps() {
     // PUSH PSW
     state = prepareState(0xf5, 0);
     state->registers->a = 0xab;
-    state->flags.c = 1;
-    state->flags.p = 1;
-    state->flags.h = 1;
-    state->flags.z = 1;
-    state->flags.s = 1;
+    state->flags->c = 1;
+    state->flags->p = 1;
+    state->flags->h = 1;
+    state->flags->z = 1;
+    state->flags->s = 1;
     state->sp = 0x2400;
 
     assert(cycle(state) == 11);
     assert(state->memory[0x23ff] == 0xab);
-    
     assert(state->memory[0x23fe] == 0b11010101);
     assert(state->pc == 0x0001);
-
-//    typedef struct flags {
-//        unsigned int c  : 1;    // Carry
-//        unsigned int v1 : 1;    // Vacant bit
-//        unsigned int p  : 1;    // Parity
-//        unsigned int v2 : 1;    // Vacant bit
-//        unsigned int h  : 1;    // Auxilary carry
-//        unsigned int i  : 1;    // Interrupt
-//        unsigned int z  : 1;    // Zero
-//        unsigned int s  : 1;    // Sign
-//    } flags;
     
     // POP B
     state = prepareState(0xc1, 0);
@@ -417,27 +407,27 @@ static void testIncrementAndDecrement() {
     assert(cycle(state) == 5);
     assert(state->pc == 0x0001);
     assert(state->registers->b == 0x0f);
-    assert(state->flags.z == 0);
-    assert(state->flags.s == 0);
-    assert(state->flags.p == 1);
+    assert(state->flags->z == 0);
+    assert(state->flags->s == 0);
+    assert(state->flags->p == 1);
     
     state = prepareState(0x05, 0);
     state->registers->b = 0xff;
     cycle(state);
     
     assert(state->registers->b == 0xfe);
-    assert(state->flags.z == 0);
-    assert(state->flags.s == 1);
-    assert(state->flags.p == 0);
+    assert(state->flags->z == 0);
+    assert(state->flags->s == 1);
+    assert(state->flags->p == 0);
     
     state = prepareState(0x05, 0);
     state->registers->b = 0x01;
     cycle(state);
     
     assert(state->registers->b == 0x00);
-    assert(state->flags.z == 1);
-    assert(state->flags.s == 0);
-    assert(state->flags.p == 1);
+    assert(state->flags->z == 1);
+    assert(state->flags->s == 0);
+    assert(state->flags->p == 1);
 
     // DCR C
     state = prepareState(0x0d, 0);
@@ -471,6 +461,16 @@ static void testIncrementAndDecrement() {
 static void testAdd() {
     emuState *state;
 
+    // ADI
+    state = prepareState(0xc6, 0);
+    state->memory[1] = 0x01;
+    state->registers->a = 0x9f;
+
+    assert(cycle(state) == 7);
+    assert(state->registers->a == 0xa0);
+    assert(state->pc == 0x0002);
+    assert(state->flags->c == 0);
+    
     // DAD B
     state = prepareState(0x09, 0);
     state->registers->b = 0x00;
@@ -482,7 +482,7 @@ static void testAdd() {
     assert(state->registers->h == 0x00);
     assert(state->registers->l == 0x00);
     assert(state->pc == 0x0001);
-    assert(state->flags.c == 1);
+    assert(state->flags->c == 1);
     
     // DAD D
     state = prepareState(0x19, 0);
@@ -495,7 +495,7 @@ static void testAdd() {
     assert(state->registers->h == 0x00);
     assert(state->registers->l == 0x00);
     assert(state->pc == 0x0001);
-    assert(state->flags.c == 1);
+    assert(state->flags->c == 1);
     
     // DAD H
     state = prepareState(0x29, 0);
@@ -506,11 +506,24 @@ static void testAdd() {
     assert(state->registers->h == 0x01);
     assert(state->registers->l == 0xfe);
     assert(state->pc == 0x0001);
-    assert(state->flags.c == 0);
+    assert(state->flags->c == 0);
 }
 
 static void testLogical() {
     emuState *state;
+    
+    // ANI
+    state = prepareState(0xe6, 0);
+    state->memory[1] = 0xe6;
+    state->memory[2] = 0x0f;
+    state->registers->a = 0x40;
+    state->flags->c = 1;
+    state->flags->h = 1;
+
+    assert(cycle(state) == 7);
+    assert(state->pc == 0x0002);
+    assert(state->flags->c == 0);
+    assert(state->flags->h == 0);
     
     // CPI
     state = prepareState(0xfe, 0);
@@ -519,10 +532,30 @@ static void testLogical() {
     
     assert(cycle(state) == 7);
     assert(state->pc == 0x0002);
-    assert(state->flags.z == 0);
-    assert(state->flags.s == 1);
-    assert(state->flags.p == 1);
-    assert(state->flags.c == 1);
+    assert(state->flags->z == 0);
+    assert(state->flags->s == 1);
+    assert(state->flags->p == 1);
+    assert(state->flags->c == 1);
+}
+
+static void testRotate() {
+    emuState *state;
+    
+    // RRC
+    state = prepareState(0x0f, 0);
+    state->registers->a = 0b10101010;
+    
+    assert(cycle(state) == 4);
+    assert(state->pc == 0x0001);
+    assert(state->registers->a == 0b01010101);
+    assert(state->flags->c == 0);
+    
+    state = prepareState(0x0f, 0);
+    state->registers->a = 0b01010101;
+    cycle(state);
+    
+    assert(state->registers->a == 0b10101010);
+    assert(state->flags->c == 1);
 }
 
 static void testInputOutput() {
