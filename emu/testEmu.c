@@ -21,6 +21,7 @@ static void testIncrementAndDecrement();
 static void testAdd();
 static void testLogical();
 static void testRotate();
+static void testSpecials();
 static void testInputOutput();
 static void testControl();
 
@@ -69,6 +70,7 @@ void testCycle() {
     testAdd();
     testLogical();
     testRotate();
+    testSpecials();
     testInputOutput();
     testControl();
     printf("OK!\n");
@@ -85,12 +87,44 @@ static void testMoveLoadAndStore() {
     assert(state->registers->a == 0xab);
     assert(state->pc == 0x0001);
     
+    // MOV A,E
+    state = prepareState(0x7b, 0);
+    state->registers->e = 0xab;
+    
+    assert(cycle(state) == 5);
+    assert(state->registers->a == 0xab);
+    assert(state->pc == 0x0001);
+    
     // MOV A,H
     state = prepareState(0x7c, 0);
     state->registers->h = 0xab;
 
     assert(cycle(state) == 5);
     assert(state->registers->a == 0xab);
+    assert(state->pc == 0x0001);
+    
+    // MOV D,A
+    state = prepareState(0x57, 0);
+    state->registers->a = 0xab;
+    
+    assert(cycle(state) == 5);
+    assert(state->registers->d == 0xab);
+    assert(state->pc == 0x0001);
+    
+    // MOV E,A
+    state = prepareState(0x5f, 0);
+    state->registers->a = 0xab;
+    
+    assert(cycle(state) == 5);
+    assert(state->registers->e == 0xab);
+    assert(state->pc == 0x0001);
+    
+    // MOV H,A
+    state = prepareState(0x67, 0);
+    state->registers->a = 0xab;
+    
+    assert(cycle(state) == 5);
+    assert(state->registers->h == 0xab);
     assert(state->pc == 0x0001);
     
     // MOV L,A
@@ -150,6 +184,14 @@ static void testMoveLoadAndStore() {
     assert(cycle(state) == 7);
     assert(state->registers->h == 0xff);
     assert(state->pc == 0x0001);
+    
+    // MVI A
+    state = prepareState(0x3e, 0);
+    state->memory[1] = 0xab;
+    
+    assert(cycle(state) == 7);
+    assert(state->registers->a == 0xab);
+    assert(state->pc == 0x0002);
     
     // MVI B
     state = prepareState(0x06, 0);
@@ -215,6 +257,16 @@ static void testMoveLoadAndStore() {
     assert(state->registers->l == 0x00);
     assert(state->pc == 0x0003);
 
+    // LDAX B
+    state = prepareState(0x0a, 0);
+    state->memory[0xabcd] = 0x12;
+    state->registers->b = 0xab;
+    state->registers->c = 0xcd;
+    
+    assert(cycle(state) == 7);
+    assert(state->registers->a == 0x12);
+    assert(state->pc == 0x0001);
+    
     // LDAX D
     state = prepareState(0x1a, 0);
     state->memory[0xabcd] = 0x12;
@@ -225,6 +277,26 @@ static void testMoveLoadAndStore() {
     assert(state->registers->a == 0x12);
     assert(state->pc == 0x0001);
 
+    // STA
+    state = prepareState(0x32, 0);
+    state->memory[1] = 0xcd;
+    state->memory[2] = 0xab;
+    state->registers->a = 0x12;
+    
+    assert(cycle(state) == 13);
+    assert(state->memory[0xabcd] == 0x12);
+    assert(state->pc == 0x0003);
+    
+    // LDA
+    state = prepareState(0x3a, 0);
+    state->memory[1] = 0xcd;
+    state->memory[2] = 0xab;
+    state->memory[0xabcd] = 0x12;
+    
+    assert(cycle(state) == 13);
+    assert(state->registers->a == 0x12);
+    assert(state->pc == 0x0003);
+    
     // XCHG
     state = prepareState(0xeb, 0);
     state->registers->d = 0x03;
@@ -330,6 +402,22 @@ static void testStackOps() {
     assert(state->sp == 0x2400);
     assert(state->pc == 0x0001);
     
+    // POP PSW
+    state = prepareState(0xf1, 0);
+    state->memory[0x23ff] = 0xab;
+    state->memory[0x23fe] = 0b11010101;
+    state->sp = 0x23fe;
+
+    assert(cycle(state) == 10);
+    assert(state->sp == 0x2400);
+    assert(state->pc == 0x0001);
+    assert(state->registers->a == 0xab);
+    assert(state->flags->c == 1);
+    assert(state->flags->p == 1);
+    assert(state->flags->h == 1);
+    assert(state->flags->z == 1);
+    assert(state->flags->s == 1);
+
     // LXI SP
     state = prepareState(0x31, 0);
     state->memory[1] = 0x00;
@@ -395,10 +483,35 @@ static void testReturn() {
     assert(cycle(state) == 10);
     assert(state->pc == 0x18dc);
     assert(state->sp == 0x2400);
+    
+    // RZ
+    state = prepareState(0xc8, 0);
+    state->memory[0x23fe] = 0xdc;
+    state->memory[0x23ff] = 0x18;
+    state->sp = 0x23fe;
+    state->flags->z = 1;
+
+    assert(cycle(state) == 11);
+    assert(state->pc == 0x18dc);
+    assert(state->sp == 0x2400);
+    
+    state = prepareState(0xc8, 0);
+    state->flags->z = 0;
+
+    assert(cycle(state) == 5);
+    assert(state->pc == 0x0001);
 }
 
 static void testIncrementAndDecrement() {
     emuState *state;
+    
+    // DCR A
+    state = prepareState(0x3d, 0);
+    state->registers->a = 0x10;
+    
+    assert(cycle(state) == 5);
+    assert(state->pc == 0x0001);
+    assert(state->registers->a == 0x0f);
     
     // DCR B
     state = prepareState(0x05, 0);
@@ -436,6 +549,16 @@ static void testIncrementAndDecrement() {
     assert(cycle(state) == 5);
     assert(state->pc == 0x0001);
     assert(state->registers->c == 0x0f);
+    
+    // INX B
+    state = prepareState(0x03, 0);
+    state->registers->b = 0x0f;
+    state->registers->c = 0xff;
+    
+    assert(cycle(state) == 5);
+    assert(state->registers->b == 0x10);
+    assert(state->registers->c == 0x00);
+    assert(state->pc == 0x0001);
     
     // INX D
     state = prepareState(0x13, 0);
@@ -512,6 +635,22 @@ static void testAdd() {
 static void testLogical() {
     emuState *state;
     
+    // ANA A
+    state = prepareState(0xa7, 0);
+    state->registers->a = 0x40;
+    
+    assert(cycle(state) == 4);
+    assert(state->pc == 0x0001);
+    assert(state->registers->a == 0x40);
+    
+    // XRA A
+    state = prepareState(0xaf, 0);
+    state->registers->a = 0x40;
+    
+    assert(cycle(state) == 4);
+    assert(state->pc == 0x0001);
+    assert(state->registers->a == 0);
+
     // ANI
     state = prepareState(0xe6, 0);
     state->memory[1] = 0xe6;
@@ -558,6 +697,16 @@ static void testRotate() {
     assert(state->flags->c == 1);
 }
 
+static void testSpecials() {
+    emuState *state;
+
+    // STC
+    state = prepareState(0x37, 0);
+
+    assert(cycle(state) == 4);
+    assert(state->pc == 0x0001);
+}
+
 static void testInputOutput() {
     emuState *state;
 
@@ -571,6 +720,13 @@ static void testInputOutput() {
 static void testControl() {
     emuState *state;
     
+    // EI
+    state = prepareState(0xfb, 0);
+    
+    assert(cycle(state) == 4);
+    assert(state->pc == 0x0001);
+    assert(state->flags->i == 1);
+
     // NOP
     state = prepareState(0x00, 0);
 

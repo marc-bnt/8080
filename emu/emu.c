@@ -13,6 +13,8 @@
 
 #define LOG 0
 
+int count = 0;
+
 static uint8_t getParity(uint8_t value) {
     int i;
     int p = 0;
@@ -67,6 +69,14 @@ int cycle(emuState *state) {
             state->pc += 2;
             break;
             
+        case 0x03: {    // INX B
+            int16_t result = (state->registers->b << 8 | state->registers->c) + 1;
+            cycles = 5;
+            state->registers->b = result >> 8;
+            state->registers->c = result;
+            break;
+        }
+            
         case 0x05:  // DCR B
             cycles = 5;
             setFlags(state, --state->registers->b);
@@ -88,6 +98,11 @@ int cycle(emuState *state) {
             state->flags->c = (value > 0xffff);
             break;
         }
+            
+        case 0x0a:  // LDAX B
+            cycles = 7;
+            state->registers->a = state->memory[state->registers->b << 8 | state->registers->c];
+            break;
             
         case 0x0d:  // DCR C
             cycles = 5;
@@ -178,9 +193,37 @@ int cycle(emuState *state) {
             state->pc += 2;
             break;
             
+        case 0x32:  // STA
+            cycles = 13;
+            state->memory[opcode[2] << 8 | opcode[1]] = state->registers->a;
+            state->pc += 2;
+            break;
+            
         case 0x36:  // MVI M,H
             cycles = 10;
             state->memory[state->registers->h << 8 | state->registers->l] = opcode[1];
+            state->pc++;
+            break;
+            
+        case 0x37:  // STC M,H
+            cycles = 4;
+            state->flags->c = 1;
+            break;
+
+        case 0x3a:  // LDA
+            cycles = 13;
+            state->registers->a = state->memory[opcode[2] << 8 | opcode[1]];
+            state->pc += 2;
+            break;
+            
+        case 0x3d:  // DCR A
+            cycles = 5;
+            setFlags(state, --state->registers->a);
+            break;
+            
+        case 0x3e:  // MVI A
+            cycles = 7;
+            state->registers->a = opcode[1];
             state->pc++;
             break;
             
@@ -189,14 +232,29 @@ int cycle(emuState *state) {
             state->registers->d = state->memory[state->registers->h << 8 | state->registers->l];
             break;
             
+        case 0x57:  // MOV D,A
+            cycles = 5;
+            state->registers->d = state->registers->a;
+            break;
+            
         case 0x5e:  // MOV E,M
             cycles = 7;
             state->registers->e = state->memory[state->registers->h << 8 | state->registers->l];
             break;
             
+        case 0x5f:  // MOV E,A
+            cycles = 5;
+            state->registers->e = state->registers->a;
+            break;
+            
         case 0x66:  // MOV H,M
             cycles = 7;
             state->registers->h = state->memory[state->registers->h << 8 | state->registers->l];
+            break;
+            
+        case 0x67:  // MOV H,A
+            cycles = 5;
+            state->registers->h = state->registers->a;
             break;
             
         case 0x6f:  // MOV L,A
@@ -214,6 +272,11 @@ int cycle(emuState *state) {
             state->registers->a = state->registers->d;
             break;
             
+        case 0x7b:  // MOV A,E
+            cycles = 5;
+            state->registers->a = state->registers->e;
+            break;
+            
         case 0x7c:  // MOV A,H
             cycles = 5;
             state->registers->a = state->registers->h;
@@ -222,6 +285,18 @@ int cycle(emuState *state) {
         case 0x7e:  // MOV A,M
             cycles = 7;
             state->registers->a = state->memory[state->registers->h << 8 | state->registers->l];
+            break;
+            
+        case 0xa7:  // ANA A
+            cycles = 4;
+            state->registers->a = state->registers->a & state->registers->a;
+            setFlags(state, state->registers->a);
+            break;
+            
+        case 0xaf:  // XRA A
+            cycles = 4;
+            state->registers->a = state->registers->a ^ state->registers->a;
+            setFlags(state, state->registers->a);
             break;
             
         case 0xc1:  // POP B
@@ -263,6 +338,17 @@ int cycle(emuState *state) {
             state->pc++;
             break;
         }
+            
+        case 0xc8:  // RZ
+            if (state->flags->z) {
+                cycles = 11;
+                state->pc = state->memory[state->sp + 1] << 8 | state->memory[state->sp];
+                state->sp += 2;
+            } else {
+                cycles = 5;
+            }
+            
+            break;
             
         case 0xc9:  // RET
             cycles = 10;
@@ -334,6 +420,13 @@ int cycle(emuState *state) {
             break;
         }
             
+        case 0xf1:  // POP PSW
+            cycles = 10;
+            *(uint8_t *)state->flags = state->memory[state->sp];
+            state->registers->a = state->memory[state->sp + 1];
+            state->sp += 2;
+            break;
+            
         case 0xf5:  // PUSH PSW
             cycles = 11;
             state->memory[state->sp - 1] = state->registers->a;
@@ -341,7 +434,12 @@ int cycle(emuState *state) {
             state->sp -= 2;
             break;
     
-        case 0xfe:
+        case 0xfb:  // EI
+            cycles = 4;
+            state->flags->i = 1;
+            break;
+            
+        case 0xfe:  // CPI
             cycles = 7;
             setFlags(state, state->registers->a - opcode[1]);
             state->flags->c = (state->registers->a < opcode[1]);
@@ -350,11 +448,13 @@ int cycle(emuState *state) {
             break;
 
         default:
-            printf("Invalid opcode at 0x%04x: 0x%02x (0x%02x, 0x%02x) \n", offset, *opcode, opcode[1], opcode[2]);
-            getchar();
+            printf("Invalid opcode at 0x%04x: 0x%02x (0x%02x, 0x%02x)\n", offset, *opcode, opcode[1], opcode[2]);
+            printf("%d instructions executed succesfully\n", count);
             exit(1);
     }
     
+    count++;
+
 #if LOG
     printf("0x%04x: 0x%02x (0x%02x, 0x%02x) \n", offset, *opcode, opcode[1], opcode[2]);
 #endif

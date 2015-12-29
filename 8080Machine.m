@@ -38,14 +38,6 @@
     [self loadFile:@"invaders.f" offset:0x1000];
     [self loadFile:@"invaders.e" offset:0x1800];
     
-//    int i, j;
-//
-//    for (i=0; i< 224; i++) {
-//        for (j = 0; j < 256; j+= 8) {
-//            state->memory[0x2400 + (i*(256/8)) + j/8] = 0xFF;
-//        }
-//    }
-
     return self;
 }
 
