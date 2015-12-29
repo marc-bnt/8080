@@ -10,4 +10,4 @@ void testEmu();
 
 void testInit();
 
-void testExecute();
+void testCycle();

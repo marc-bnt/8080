@@ -10,6 +10,8 @@
 #import "8080Machine.h"
 #import "testEmu.h"
 
+#define TEST 1
+
 @implementation _080Machine
 
 -(void)loadFile:(NSString *)filename offset:(uint16_t)offset
@@ -24,7 +26,9 @@
 
 -(id) init
 {
+#if TEST
     testEmu();
+#endif
     
     state = malloc(sizeof(emuState));
     init(state);
@@ -45,15 +49,15 @@
     return self;
 }
 
-- (void) startEmulation
+- (void) start
 {
     timer = [NSTimer scheduledTimerWithTimeInterval: 0.001
                                              target: self
-                                           selector: @selector(cycle)
+                                           selector: @selector(synchronize)
                                            userInfo: nil repeats:YES];
 }
 
--(void) cycle
+-(void) synchronize
 {
     struct timeval time;
     gettimeofday(&time, NULL);
@@ -68,10 +72,8 @@
     int requiredCycles = (now - last) * 2;
     
     while (cycles < requiredCycles) {
-        cycles += execute(state);
+        cycles += cycle(state);
     }
-    
-    NSLog(@"%d", cycles);
     
     last = now;
 }

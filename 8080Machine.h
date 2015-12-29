@@ -20,8 +20,8 @@
 
 -(void) loadFile:(NSString *)filename offset:(uint16_t)offset;
 -(id) init;
--(void) startEmulation;
--(void) cycle;
+-(void) start;
+-(void) synchronize;
 -(void *) framebuffer;
 
 @end

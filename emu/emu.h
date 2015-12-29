@@ -25,16 +25,17 @@ typedef struct registers {
     uint8_t e;
     uint8_t h;
     uint8_t l;
-    
-    uint16_t sp;
-    uint16_t pc;
 } registers;
 
 typedef struct emuState {
     registers *registers;
     flags     *flags;
     uint8_t   *memory;
+    
+    uint16_t sp;
+    uint16_t pc;
 } emuState;
 
 void init(emuState *state);
-int execute(emuState *state);
+
+int cycle(emuState *state);

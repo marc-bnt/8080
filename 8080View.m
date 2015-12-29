@@ -32,7 +32,7 @@
                                              repeats:YES];
         
         [[NSRunLoop currentRunLoop] addTimer:renderTimer forMode:NSDefaultRunLoopMode];
-        [machine startEmulation];
+        [machine start];
     }
     
     return self;

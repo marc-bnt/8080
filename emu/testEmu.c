@@ -12,10 +12,12 @@
 #include "emu.h"
 #include "testEmu.h"
 
+emuState *prepareState(int8_t opcode);
+
 void testEmu() {
     printf("Testing emu...\n");
     testInit();
-    testExecute();
+    testCycle();
 }
 
 void testInit() {
@@ -31,8 +33,8 @@ void testInit() {
     assert(state->registers->h == 0);
     assert(state->registers->l == 0);
 
-    assert(state->registers->sp == 0);
-    assert(state->registers->pc == 0);
+    assert(state->sp == 0);
+    assert(state->pc == 0);
 
     assert(state->flags->c == 0);
     assert(state->flags->p == 0);
@@ -44,12 +46,19 @@ void testInit() {
     printf("OK!\n");
 }
 
-void testExecute() {
-    printf(" * Testing execute(): ");
+void testCycle() {
+    printf(" * Testing cycle(): ");
+
+    assert(cycle(prepareState(0x00)) == 1);
+    
+    printf("OK!\n");
+}
+
+emuState *prepareState(int8_t opcode) {
     emuState *state = malloc(sizeof(emuState));
     init(state);
     
-    assert(execute(state) == 1);
+    state->memory[0] = opcode;
     
-    printf("OK!\n");
+    return state;
 }
