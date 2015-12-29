@@ -18,6 +18,8 @@ static void testJump();
 static void testCall();
 static void testReturn();
 static void testIncrementAndDecrement();
+static void testAdd();
+static void testLogical();
 static void testControl();
 
 static emuState *prepareState(int8_t opcode, int16_t offset);
@@ -62,12 +64,30 @@ void testCycle() {
     testCall();
     testReturn();
     testIncrementAndDecrement();
+    testAdd();
+    testLogical();
     testControl();
     printf("OK!\n");
 }
 
 static void testMoveLoadAndStore() {
     emuState *state;
+
+    // MOV A,H
+    state = prepareState(0x7c, 0);
+    state->registers->h = 0xab;
+
+    assert(cycle(state) == 5);
+    assert(state->registers->a == 0xab);
+    assert(state->pc == 0x0001);
+    
+    // MOV L,A
+    state = prepareState(0x6f, 0);
+    state->registers->a = 0xab;
+    
+    assert(cycle(state) == 5);
+    assert(state->registers->l == 0xab);
+    assert(state->pc == 0x0001);
     
     // MOV M,A
     state = prepareState(0x77, 0);
@@ -81,10 +101,36 @@ static void testMoveLoadAndStore() {
 
     // MVI B
     state = prepareState(0x06, 0);
-    state->memory[1] = 0xAB;
+    state->memory[1] = 0xab;
 
     assert(cycle(state) == 7);
-    assert(state->registers->b == 0xAB);
+    assert(state->registers->b == 0xab);
+    assert(state->pc == 0x0002);
+    
+    // MVI C
+    state = prepareState(0x0e, 0);
+    state->memory[1] = 0xab;
+    
+    assert(cycle(state) == 7);
+    assert(state->registers->c == 0xab);
+    assert(state->pc == 0x0002);
+    
+    // MVI H
+    state = prepareState(0x26, 0);
+    state->memory[1] = 0xab;
+    
+    assert(cycle(state) == 7);
+    assert(state->registers->h == 0xab);
+    assert(state->pc == 0x0002);
+    
+    // MVI M,H
+    state = prepareState(0x36, 0);
+    state->memory[1] = 0xab;
+    state->registers->h = 0xb1;
+    state->registers->l = 0x00;
+    
+    assert(cycle(state) == 10);
+    assert(state->memory[0xb100] == 0xab);
     assert(state->pc == 0x0002);
     
     // LXI D
@@ -93,7 +139,7 @@ static void testMoveLoadAndStore() {
     state->memory[2] = 0xB1;
 
     assert(cycle(state) == 10);
-    assert(state->registers->d == 0xB1);
+    assert(state->registers->d == 0xb1);
     assert(state->registers->e == 0x00);
     assert(state->pc == 0x0003);
     
@@ -120,6 +166,30 @@ static void testMoveLoadAndStore() {
 
 static void testStackOps() {
     emuState *state;
+    
+    // PUSH D
+    state = prepareState(0xd5, 0);
+    state->registers->d = 0xab;
+    state->registers->e = 0xcd;
+    state->sp = 0x2400;
+
+    assert(cycle(state) == 11);
+    assert(state->memory[0x23ff] == 0xab);
+    assert(state->memory[0x23fe] == 0xcd);
+    assert(state->sp == 0x23fe);
+    assert(state->pc == 0x0001);
+
+    // PUSH H
+    state = prepareState(0xe5, 0);
+    state->registers->h = 0xab;
+    state->registers->l = 0xcd;
+    state->sp = 0x2400;
+    
+    assert(cycle(state) == 11);
+    assert(state->memory[0x23ff] == 0xab);
+    assert(state->memory[0x23fe] == 0xcd);
+    assert(state->sp == 0x23fe);
+    assert(state->pc == 0x0001);
     
     // LXI SP
     state = prepareState(0x31, 0);
@@ -239,6 +309,50 @@ static void testIncrementAndDecrement() {
     assert(state->registers->h == 0x10);
     assert(state->registers->l == 0x00);
     assert(state->pc == 0x0001);
+}
+
+static void testAdd() {
+    emuState *state;
+
+    // DAD D
+    state = prepareState(0x19, 0);
+    state->registers->d = 0x00;
+    state->registers->e = 0x01;
+    state->registers->h = 0xff;
+    state->registers->l = 0xff;
+
+    assert(cycle(state) == 10);
+    assert(state->registers->h == 0x00);
+    assert(state->registers->l == 0x00);
+    assert(state->pc == 0x0001);
+    assert(state->flags->c == 1);
+    
+    // DAD H
+    state = prepareState(0x29, 0);
+    state->registers->h = 0x00;
+    state->registers->l = 0xff;
+
+    assert(cycle(state) == 10);
+    assert(state->registers->h == 0x01);
+    assert(state->registers->l == 0xfe);
+    assert(state->pc == 0x0001);
+    assert(state->flags->c == 0);
+}
+
+static void testLogical() {
+    emuState *state;
+    
+    // CPI
+    state = prepareState(0xfe, 0);
+    state->memory[1] = 0x41;
+    state->registers->a = 0x40;
+    
+    assert(cycle(state) == 7);
+    assert(state->pc == 0x0002);
+    assert(state->flags->z == 0);
+    assert(state->flags->s == 1);
+    assert(state->flags->p == 1);
+    assert(state->flags->c == 1);
 }
 
 static void testControl() {

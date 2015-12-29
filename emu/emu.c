@@ -11,7 +11,7 @@
 #include <assert.h>
 #import "emu.h"
 
-#define LOG  0
+#define LOG 0
 
 static uint8_t getParity(uint8_t value) {
     int i;
@@ -72,6 +72,12 @@ int cycle(emuState *state) {
             state->pc++;
             break;
 
+        case 0x0e:  // MVI C
+            cycles = 7;
+            state->registers->c = opcode[1];
+            state->pc++;
+            break;
+            
         case 0x11:  // LXI D
             cycles = 10;
             state->registers->d = opcode[2];
@@ -107,15 +113,59 @@ int cycle(emuState *state) {
             break;
         }
             
+        case 0x26:  // MVI H
+            cycles = 7;
+            state->registers->h = opcode[1];
+            state->pc++;
+            break;
+            
+        case 0x19: {    // DAD D
+            cycles = 10;
+            int16_t value = state->registers->h << 8 | state->registers->l;
+            value += state->registers->d << 8 | state->registers->e;
+            
+            state->registers->h = value >> 8;
+            state->registers->l = value;
+            state->flags->c = ((value & 0xffff0000) != 0);
+            break;
+        }
+            
+        case 0x29: {    // DAD H
+            cycles = 10;
+            int16_t value = state->registers->h << 8 | state->registers->l;
+            value += value;
+            
+            state->registers->h = value >> 8;
+            state->registers->l = value;
+            state->flags->c = ((value & 0xffff0000) != 0);
+            break;
+        }
+            
         case 0x31:  // LXI SP
             cycles = 10;
             state->sp = opcode[2] << 8 | opcode[1];
             state->pc += 2;
             break;
             
+        case 0x36:  // MVI M,H
+            cycles = 10;
+            state->memory[state->registers->h << 8 | state->registers->l] = opcode[1];
+            state->pc++;
+            break;
+            
+        case 0x6f:  // MOV L,A
+            cycles = 5;
+            state->registers->l = state->registers->a;
+            break;
+            
         case 0x77:  // MOV M,A
             cycles = 7;
             state->memory[state->registers->h << 8 | state->registers->l] = state->registers->a;
+            break;
+            
+        case 0x7c:  // MOV A,H
+            cycles = 5;
+            state->registers->a = state->registers->h;
             break;
             
         case 0xc2:  // JNZ B
@@ -151,13 +201,36 @@ int cycle(emuState *state) {
             break;
         }
 
+        case 0xd5:  // PUSH D
+            cycles = 11;
+            state->memory[state->sp - 1] = state->registers->d;
+            state->memory[state->sp - 2] = state->registers->e;
+            state->sp -= 2;
+            break;
+            
+        case 0xe5:  // PUSH H
+            cycles = 11;
+            state->memory[state->sp - 1] = state->registers->h;
+            state->memory[state->sp - 2] = state->registers->l;
+            state->sp -= 2;
+            break;
+            
+        case 0xfe:
+            cycles = 7;
+            setFlags(state, state->registers->a - opcode[1]);
+            state->flags->c = (state->registers->a < opcode[1]);
+            state->pc++;
+            
+            break;
+
         default:
-            printf("Invalid opcode: 0x%02x (0x%02x, 0x%02x) \n", *opcode, opcode[1], opcode[2]);
+            printf("Invalid opcode at 0x%04x: 0x%02x (0x%02x, 0x%02x) \n", offset, *opcode, opcode[1], opcode[2]);
+            getchar();
             exit(1);
     }
     
 #if LOG
-    printf("0x%08x: 0x%02x (0x%02x, 0x%02x) \n", offset, *opcode, opcode[1], opcode[2]);
+    printf("0x%04x: 0x%02x (0x%02x, 0x%02x) \n", offset, *opcode, opcode[1], opcode[2]);
 #endif
     
     return cycles;
