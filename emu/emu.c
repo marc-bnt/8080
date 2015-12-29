@@ -307,7 +307,7 @@ int cycle(emuState *state) {
         case 0xf5:  // PUSH PSW
             cycles = 11;
             state->memory[state->sp - 1] = state->registers->a;
-//            state->memory[state->sp - 2] = *(uint8_t *)&state->flags;
+            state->memory[state->sp - 2] = *(uint8_t *)&state->flags;
             printf("\n0x%02x\n", *(uint8_t *)&state->flags);
             state->sp -= 2;
             break;

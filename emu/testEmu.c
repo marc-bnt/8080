@@ -290,7 +290,7 @@ static void testStackOps() {
     assert(cycle(state) == 11);
     assert(state->memory[0x23ff] == 0xab);
     
-    assert(state->memory[0x23fe] == 0b10101011);
+    assert(state->memory[0x23fe] == 0b11010101);
     assert(state->pc == 0x0001);
 
 //    typedef struct flags {
