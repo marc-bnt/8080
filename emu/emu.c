@@ -121,23 +121,23 @@ int cycle(emuState *state) {
             
         case 0x19: {    // DAD D
             cycles = 10;
-            int16_t value = state->registers->h << 8 | state->registers->l;
+            int32_t value = state->registers->h << 8 | state->registers->l;
             value += state->registers->d << 8 | state->registers->e;
-            
+
             state->registers->h = value >> 8;
             state->registers->l = value;
-            state->flags->c = ((value & 0xffff0000) != 0);
+            state->flags->c = (value > 0xffff);
             break;
         }
             
         case 0x29: {    // DAD H
             cycles = 10;
-            int16_t value = state->registers->h << 8 | state->registers->l;
+            int32_t value = state->registers->h << 8 | state->registers->l;
             value += value;
             
             state->registers->h = value >> 8;
             state->registers->l = value;
-            state->flags->c = ((value & 0xffff0000) != 0);
+            state->flags->c = (value > 0xffff);
             break;
         }
             
