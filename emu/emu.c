@@ -24,25 +24,52 @@ void init(emuState *state) {
 }
 
 int cycle(emuState *state) {
-    int cycles = 1;
+    int cycles = -1;
     
     // Fetch instruction at PC address
-    uint8_t offset = state->pc++;
-    uint8_t opcode = state->memory[offset];
+    uint16_t offset = state->pc++;
+    uint8_t *opcode = &state->memory[offset];
     
 #if LOG
-    printf("0x%08x: 0x%02x\n", offset, opcode);
+    printf("0x%08x: 0x%02x (0x%02x, 0x%02x) \n", offset, *opcode, opcode[1], opcode[2]);
 #endif
     
-    switch (opcode) {
+    switch (*opcode) {
         case 0x00:  // NOP
+            cycles = 4;
             break;
             
-        case 0xc3:  // NOP
+        case 0x06:  // MVI B
+            cycles = 7;
+            state->registers->b = opcode[1];
+            state->pc++;
             break;
             
+        case 0x31:  // LXI SP
+            cycles = 10;
+            state->sp = opcode[2] << 8 | opcode[1];
+            state->pc += 2;
+            break;
+            
+        case 0xc3:  // JMP
+            cycles = 10;
+            state->pc = opcode[2] << 8 | opcode[1];
+            break;
+            
+        case 0xcd: {    // CALL
+            int16_t ret = state->pc + 2;
+            cycles = 17;
+
+            state->memory[state->sp - 1] = ret >> 8;
+            state->memory[state->sp - 2] = ret;
+
+            state->sp -= 2;
+            state->pc = opcode[2] << 8 | opcode[1];
+            break;
+        }
+
         default:
-            printf("Invalid opcode 0x%02x", opcode);
+            printf("Invalid opcode 0x%02x", *opcode);
             exit(1);
     }
     
