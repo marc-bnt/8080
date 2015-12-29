@@ -29,7 +29,7 @@ typedef struct registers {
 
 typedef struct emuState {
     registers *registers;
-    flags     *flags;
+    flags     flags;
     uint8_t   *memory;
     
     uint16_t sp;
