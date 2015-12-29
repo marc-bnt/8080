@@ -13,6 +13,29 @@
 
 #define LOG  0
 
+static uint8_t getParity(uint8_t value) {
+    int i;
+    int p = 0;
+    
+    value = (value & ((1 << 8) - 1));
+    
+    for (i = 0; i < 8; i++) {
+        if (value & 0x1) {
+            p++;
+        }
+        
+        value = value >> 1;
+    }
+
+    return (0 == (p & 0x1));
+}
+
+static void setFlags(emuState *state, uint8_t value) {
+    state->flags->z = (value == 0);
+    state->flags->s = ((value & 0x80) == 0x80);
+    state->flags->p = getParity(value);
+}
+
 void init(emuState *state) {
     state->registers = malloc(sizeof(registers));
     state->flags = malloc(sizeof(flags));
@@ -35,6 +58,12 @@ int cycle(emuState *state) {
     switch (*opcode) {
         case 0x00:  // NOP
             cycles = 4;
+            break;
+            
+        case 0x05:  // DCR B
+            cycles = 5;
+            setFlags(state, --state->registers->b);
+            
             break;
             
         case 0x06:  // MVI B

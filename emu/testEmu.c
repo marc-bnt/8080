@@ -162,7 +162,32 @@ static void testIncrementAndDecrement() {
     
     // DCR B
     state = prepareState(0x05, 0);
-    // TODO: Flags
+    state->registers->b = 0x10;
+    
+    assert(cycle(state) == 5);
+    assert(state->pc == 0x0001);
+    assert(state->registers->b == 0x0f);
+    assert(state->flags->z == 0);
+    assert(state->flags->s == 0);
+    assert(state->flags->p == 1);
+    
+    state = prepareState(0x05, 0);
+    state->registers->b = 0xff;
+    cycle(state);
+    
+    assert(state->registers->b == 0xfe);
+    assert(state->flags->z == 0);
+    assert(state->flags->s == 1);
+    assert(state->flags->p == 0);
+    
+    state = prepareState(0x05, 0);
+    state->registers->b = 0x01;
+    cycle(state);
+    
+    assert(state->registers->b == 0x00);
+    assert(state->flags->z == 1);
+    assert(state->flags->s == 0);
+    assert(state->flags->p == 1);
 
     // INX D
     state = prepareState(0x13, 0);

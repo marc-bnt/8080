@@ -7,14 +7,14 @@
 //
 
 typedef struct flags {
-    unsigned int c  : 1;
-    unsigned int v1 : 1;
-    unsigned int p  : 1;
-    unsigned int v2 : 1;
-    unsigned int h  : 1;
-    unsigned int i  : 1;
-    unsigned int z  : 1;
-    unsigned int s  : 1;
+    unsigned int c  : 1;    // Carry
+    unsigned int v1 : 1;    // Vacant bit
+    unsigned int p  : 1;    // Parity
+    unsigned int v2 : 1;    // Vacant bit
+    unsigned int h  : 1;    // Auxilary carry
+    unsigned int i  : 1;    // Interrupt
+    unsigned int z  : 1;    // Zero
+    unsigned int s  : 1;    // Sign
 } flags;
 
 typedef struct registers {
