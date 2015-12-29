@@ -118,9 +118,25 @@ int cycle(emuState *state) {
             state->memory[state->registers->h << 8 | state->registers->l] = state->registers->a;
             break;
             
+        case 0xc2:  // JNZ B
+            cycles = 10;
+
+            if (state->registers->b != 0)
+                state->pc = opcode[2] << 8 | opcode[1];
+            else
+                state->pc += 2;
+            
+            break;
+            
         case 0xc3:  // JMP
             cycles = 10;
             state->pc = opcode[2] << 8 | opcode[1];
+            break;
+            
+        case 0xc9:  // RET
+            cycles = 10;
+            state->pc = state->memory[state->sp + 1] << 8 | state->memory[state->sp];
+            state->sp += 2;
             break;
             
         case 0xcd: {    // CALL

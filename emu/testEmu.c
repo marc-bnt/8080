@@ -16,6 +16,7 @@ static void testMoveLoadAndStore();
 static void testStackOps();
 static void testJump();
 static void testCall();
+static void testReturn();
 static void testIncrementAndDecrement();
 static void testControl();
 
@@ -59,6 +60,7 @@ void testCycle() {
     testStackOps();
     testJump();
     testCall();
+    testReturn();
     testIncrementAndDecrement();
     testControl();
     printf("OK!\n");
@@ -139,6 +141,21 @@ static void testJump() {
 
     assert(cycle(state) == 10);
     assert(state->pc == 0x18d4);
+    
+    // JNZ B
+    state = prepareState(0xc2, 0);
+    state->registers->b = 0x01;
+    state->memory[1] = 0x32;
+    state->memory[2] = 0x1a;
+    
+    assert(cycle(state) == 10);
+    assert(state->pc == 0x1a32);
+    
+    state = prepareState(0xc2, 0);
+    state->registers->b = 0x00;
+    cycle(state);
+    
+    assert(state->pc == 0x0003);
 }
 
 static void testCall() {
@@ -155,6 +172,20 @@ static void testCall() {
     assert(state->memory[0x23fe] == 0xdc);
     assert(state->sp == 0x23fe);
     assert(state->pc == 0x01e6);
+}
+
+static void testReturn() {
+    emuState *state;
+    
+    // RET
+    state = prepareState(0xc9, 0);
+    state->memory[0x23fe] = 0xdc;
+    state->memory[0x23ff] = 0x18;
+    state->sp = 0x23fe;
+    
+    assert(cycle(state) == 10);
+    assert(state->pc == 0x18dc);
+    assert(state->sp == 0x2400);
 }
 
 static void testIncrementAndDecrement() {
