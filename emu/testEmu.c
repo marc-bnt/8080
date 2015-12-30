@@ -439,9 +439,9 @@ static void testJump() {
     assert(cycle(state) == 10);
     assert(state->pc == 0x18d4);
     
-    // JNZ B
+    // JNZ
     state = prepareState(0xc2, 0);
-    state->registers->b = 0x01;
+    state->flags->z = 0;
     state->memory[1] = 0x32;
     state->memory[2] = 0x1a;
     
@@ -449,7 +449,7 @@ static void testJump() {
     assert(state->pc == 0x1a32);
     
     state = prepareState(0xc2, 0);
-    state->registers->b = 0x00;
+    state->flags->z = 1;
     cycle(state);
     
     assert(state->pc == 0x0003);

@@ -309,7 +309,7 @@ int cycle(emuState *state) {
         case 0xc2:  // JNZ B
             cycles = 10;
 
-            if (state->registers->b != 0)
+            if (!state->flags->z)
                 state->pc = opcode[2] << 8 | opcode[1];
             else
                 state->pc += 2;
